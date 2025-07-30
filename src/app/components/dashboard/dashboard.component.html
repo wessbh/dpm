@@ -1,0 +1,141 @@
+<div class="dashboard">
+  <!-- Welcome Section -->
+  <div class="welcome-section">
+    <div class="welcome-content">
+      <h1 class="welcome-title">{{ greeting() }}, Dr. Admin! 👋</h1>
+      <p class="welcome-description">
+        Here's what's happening in your practice today. You have 
+        <span class="text-primary font-semibold">{{ appointmentsCount() }} appointments</span> 
+        scheduled and 
+        <span class="text-warning font-semibold">{{ pendingTasksCount() }} pending tasks</span>.
+      </p>
+    </div>
+    
+    <div class="welcome-actions">
+      <button class="btn btn-primary">
+        <span>➕</span>
+        New Appointment
+      </button>
+      <button class="btn btn-secondary">
+        <span>👤➕</span>
+        Add Patient
+      </button>
+    </div>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="stats-grid">
+    @for (stat of statistics(); track stat.id) {
+      <div class="stat-card" [attr.data-color]="stat.color">
+        <div class="stat-header">
+          <div class="stat-icon" [class]="'icon-badge-' + stat.color">
+            <span>{{ getStatIcon(stat.icon) }}</span>
+          </div>
+        </div>
+        
+        <div class="stat-content">
+          <h3 class="stat-value">{{ stat.value | number }}</h3>
+          <p class="stat-title">{{ stat.title }}</p>
+          
+          <div class="stat-trend" [class]="'trend-' + stat.trend.type">
+            <span class="trend-icon">
+              {{ stat.trend.type === 'increase' ? '📈' : '📉' }}
+            </span>
+            <span class="trend-text">{{ stat.trend.label }}</span>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Main Content Grid -->
+  <div class="content-grid">
+    <!-- Quick Actions -->
+    <div class="quick-actions-card card">
+      <div class="card-header">
+        <div class="card-title">
+          <span>⚡</span>
+          <h3>Quick Actions</h3>
+        </div>
+      </div>
+      
+      <div class="card-body">
+        <div class="quick-actions-grid">
+          @for (action of quickActions(); track action.id) {
+            <button 
+              (click)="onQuickAction(action.id)"
+              class="quick-action-btn"
+              [class]="'btn-' + action.color">
+              <span>{{ getActionIcon(action.icon) }}</span>
+              <span>{{ action.title }}</span>
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="recent-activity-card card">
+      <div class="card-header">
+        <div class="card-title">
+          <span>🕒</span>
+          <h3>Recent Activity</h3>
+        </div>
+        <button (click)="onViewAllActivities()" class="view-all-btn">
+          View All
+        </button>
+      </div>
+      
+      <div class="card-body">
+        <div class="activity-list">
+          @for (activity of recentActivities(); track activity.id) {
+            <div class="activity-item">
+              <div class="activity-icon" [style.background-color]="activity.color + '20'" [style.color]="activity.color">
+                <span>{{ getActivityIcon(activity.icon) }}</span>
+              </div>
+              <div class="activity-content">
+                <h4 class="activity-title">{{ activity.title }}</h4>
+                <p class="activity-description">{{ activity.description }}</p>
+              </div>
+              <div class="activity-time">{{ activity.time }}</div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Today's Schedule -->
+  <div class="schedule-card card">
+    <div class="card-header">
+      <div class="card-title">
+        <span>📅</span>
+        <h3>Today's Schedule</h3>
+      </div>
+      <div class="schedule-summary">
+        <span class="schedule-count">{{ todaySchedule().length }} appointments</span>
+      </div>
+    </div>
+    
+    <div class="card-body">
+      <div class="schedule-list">
+        @for (appointment of todaySchedule(); track appointment.id) {
+          <div class="schedule-item" [attr.data-status]="appointment.status">
+            <div class="schedule-time">
+              <span class="time">{{ appointment.time }}</span>
+            </div>
+            <div class="schedule-content">
+              <h4 class="patient-name">{{ appointment.patient }}</h4>
+              <p class="appointment-type">{{ appointment.type }}</p>
+            </div>
+            <div class="schedule-status">
+              <span class="status-badge" [class]="'status-' + appointment.status">
+                {{ appointment.status | titlecase }}
+              </span>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,164 @@
+<div class="app-layout">
+  <!-- Sidebar -->
+  <aside [class]="'sidebar ' + (isSidebarCollapsed() ? 'sidebar-collapsed' : 'sidebar-expanded')">
+    <!-- Logo Section -->
+    <div class="sidebar-header">
+      <div class="logo-container">
+        <div class="logo-icon">
+          <span>🏥</span>
+        </div>
+        @if (!isSidebarCollapsed()) {
+          <div class="logo-text">
+            <h1 class="font-bold text-white">DPM</h1>
+            <p class="text-xs text-blue-200">Health System</p>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Navigation Menu -->
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        @if (!isSidebarCollapsed()) {
+          <p class="nav-section-title">MAIN</p>
+        }
+        
+        <a routerLink="/dashboard" routerLinkActive="nav-item-active" class="nav-item">
+          <span>📊</span>
+          @if (!isSidebarCollapsed()) {
+            <span>Dashboard</span>
+          }
+        </a>
+        
+        <a routerLink="/patients" routerLinkActive="nav-item-active" class="nav-item">
+          <span>👥</span>
+          @if (!isSidebarCollapsed()) {
+            <span>Patients</span>
+          }
+        </a>
+        
+        <a routerLink="/appointments" routerLinkActive="nav-item-active" class="nav-item">
+          <span>📅</span>
+          @if (!isSidebarCollapsed()) {
+            <span>Appointments</span>
+          }
+          @if (!isSidebarCollapsed()) {
+            <span class="nav-badge">3</span>
+          }
+        </a>
+        
+        <a routerLink="/medical-records" routerLinkActive="nav-item-active" class="nav-item">
+          <span>📁</span>
+          @if (!isSidebarCollapsed()) {
+            <span>Medical Records</span>
+          }
+        </a>
+        
+        <a routerLink="/messages" routerLinkActive="nav-item-active" class="nav-item">
+          <span>💬</span>
+          @if (!isSidebarCollapsed()) {
+            <span>Messages</span>
+          }
+          @if (!isSidebarCollapsed()) {
+            <span class="nav-badge">3</span>
+          }
+        </a>
+        
+        <a routerLink="/settings" routerLinkActive="nav-item-active" class="nav-item">
+          <span>⚙️</span>
+          @if (!isSidebarCollapsed()) {
+            <span>Settings</span>
+          }
+        </a>
+      </div>
+    </nav>
+
+    <!-- User Profile Section -->
+    <div class="sidebar-footer">
+      <div class="user-profile">
+        <div class="user-avatar">
+          <span class="text-sm font-medium">AU</span>
+        </div>
+        @if (!isSidebarCollapsed()) {
+          <div class="user-info">
+            <p class="user-name">Admin User</p>
+            <p class="user-role">Admin</p>
+          </div>
+        }
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <div [class]="'main-content ' + (isSidebarCollapsed() ? 'main-content-expanded' : 'main-content-normal')">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-left">
+        <button (click)="toggleSidebar()" class="sidebar-toggle">
+          <span>☰</span>
+        </button>
+        
+        <nav class="breadcrumb">
+          <span class="breadcrumb-item">Dashboard</span>
+        </nav>
+      </div>
+
+      <div class="header-right">
+        <!-- Notifications -->
+        <button class="header-action">
+          <span>🔔</span>
+          <span class="notification-badge">3</span>
+        </button>
+
+        <!-- User Menu -->
+        <div class="user-menu" (click)="toggleUserMenu()">
+          <div class="user-avatar-header">
+            <span class="text-sm font-medium">AU</span>
+          </div>
+          <div class="user-info-header">
+            <p class="user-name">Admin User</p>
+            <span>▼</span>
+          </div>
+          
+          @if (isUserMenuOpen()) {
+            <div class="user-dropdown">
+              <a href="#" class="dropdown-item">
+                <span>👤</span>
+                My Profile
+              </a>
+              <a href="#" class="dropdown-item">
+                <span>⚙️</span>
+                Settings
+              </a>
+              <a href="#" class="dropdown-item">
+                <span>❓</span>
+                Help & Support
+              </a>
+              <hr class="dropdown-divider">
+              <button (click)="logout()" class="dropdown-item logout">
+                <span>🚪</span>
+                Sign Out
+              </button>
+            </div>
+          }
+        </div>
+
+        <!-- Quick Actions -->
+        <button class="btn btn-primary btn-sm">
+          <span>➕</span>
+          New Appointment
+        </button>
+        
+        <button class="btn btn-secondary btn-sm">
+          <span>👤➕</span>
+          Add Patient
+        </button>
+      </div>
+    </header>
+
+    <!-- Page Content -->
+    <main class="page-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
