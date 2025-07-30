@@ -1,0 +1,107 @@
+<mat-sidenav-container class="sidenav-container">
+  <!-- Sidebar -->
+  <mat-sidenav 
+    #sidenav 
+    [opened]="isSidenavOpen" 
+    mode="side" 
+    class="sidenav"
+    fixedInViewport="true">
+    
+    <div class="sidenav-header">
+      <div class="logo">
+        <mat-icon class="logo-icon">local_hospital</mat-icon>
+        <span class="logo-text">DPM System</span>
+      </div>
+    </div>
+
+    <mat-nav-list class="sidenav-menu">
+      @for (item of menuItems; track item.route) {
+        <a mat-list-item [routerLink]="item.route" routerLinkActive="active-link">
+          <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+          <span matListItemTitle>{{ item.label }}</span>
+          @if (item.badge) {
+            <span matListItemMeta [matBadge]="item.badge" matBadgeColor="accent"></span>
+          }
+        </a>
+      }
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <!-- Main content -->
+  <mat-sidenav-content class="main-content">
+    <!-- Top toolbar -->
+    <mat-toolbar color="primary" class="toolbar">
+      <button mat-icon-button (click)="toggleSidenav()" class="menu-button">
+        <mat-icon>menu</mat-icon>
+      </button>
+      
+      <span class="toolbar-title">Doctor-Patient Management System</span>
+      
+      <div class="toolbar-spacer"></div>
+      
+      <!-- Notifications -->
+      <button mat-icon-button [matMenuTriggerFor]="notificationMenu">
+        <mat-icon matBadge="5" matBadgeColor="warn">notifications</mat-icon>
+      </button>
+      
+      <!-- User menu -->
+      <button mat-icon-button [matMenuTriggerFor]="userMenu">
+        @if (currentUser$ | async; as user) {
+          <div class="user-avatar">
+            {{ user.firstName.charAt(0) }}{{ user.lastName.charAt(0) }}
+          </div>
+        }
+      </button>
+    </mat-toolbar>
+
+    <!-- Page content -->
+    <div class="page-content">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+<!-- Notification Menu -->
+<mat-menu #notificationMenu="matMenu" class="notification-menu">
+  <div class="menu-header">
+    <span>Notifications</span>
+    <button mat-button color="primary">Mark All Read</button>
+  </div>
+  <mat-divider></mat-divider>
+  <button mat-menu-item>
+    <mat-icon>event</mat-icon>
+    <span>New appointment scheduled</span>
+  </button>
+  <button mat-menu-item>
+    <mat-icon>message</mat-icon>
+    <span>New message from patient</span>
+  </button>
+  <button mat-menu-item>
+    <mat-icon>science</mat-icon>
+    <span>Lab results ready</span>
+  </button>
+</mat-menu>
+
+<!-- User Menu -->
+<mat-menu #userMenu="matMenu">
+  @if (currentUser$ | async; as user) {
+    <div class="user-info">
+      <div class="user-name">{{ user.firstName }} {{ user.lastName }}</div>
+      <div class="user-role">{{ user.role | titlecase }}</div>
+    </div>
+    <mat-divider></mat-divider>
+  }
+  <button mat-menu-item (click)="navigateToProfile()">
+    <mat-icon>person</mat-icon>
+    <span>Profile</span>
+  </button>
+  <button mat-menu-item>
+    <mat-icon>settings</mat-icon>
+    <span>Settings</span>
+  </button>
+  <mat-divider></mat-divider>
+  <button mat-menu-item (click)="logout()" class="logout-button">
+    <mat-icon>exit_to_app</mat-icon>
+    <span>Logout</span>
+  </button>
+</mat-menu>
